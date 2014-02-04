@@ -25,7 +25,7 @@ def create_vmtest_cfg(**kwargs):
     config.set('Host', 'pass', kwargs['hpass'])
     config.set('Host', 'cluster', kwargs['hcluster'])
 
-    with open('vmware.cfg', 'wb') as configfile:
+    with open(kwargs['cfg'], 'wb') as configfile:
         config.write(configfile)
 
     if kwargs.get('debug', None):
