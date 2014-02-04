@@ -19,6 +19,8 @@ def create_vmtest_cfg(**kwargs):
     config.set('Vcenter', 'user', kwargs['vuser'])
     config.set('Vcenter', 'pass', kwargs['vpass'])
     config.set('Vcenter', 'server', kwargs['vserver'])
+    config.set('Vcenter', 'datacenter', kwargs['vdcenter'])
+    config.set('Vcenter', 'cluster', kwargs['vcluster'])
 
     config.add_section('Host')
     config.set('Host', 'user', kwargs['huser'])
