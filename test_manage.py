@@ -15,7 +15,7 @@ import ConfigParser
 from manage import create_vmtest_cfg
 
 
-class TestManagementFunctions(unittest.TestCase):
+class ManagementFunctionsTest(unittest.TestCase):
     def setUp(self):
         self.vcenter_user = 'vcenter'
         self.vcenter_pass = 'vcenter123'
@@ -23,21 +23,24 @@ class TestManagementFunctions(unittest.TestCase):
 
         self.esxi_user = 'esxi'
         self.esxi_pass = 'esxi123'
-        self.esxi_hosts = ['host1', 'host2',]
+        self.esxi_hosts = ['host1', 'host2', ]
 
     def test_create_vmtest_cfg(self):
         cfg = create_vmtest_cfg(self.vcenter_user,
-                          self.vcenter_pass,
-                          self.vcenter_server,
-                          self.esxi_user,
-                          self.esxi_pass,
-                          self.esxi_hosts)
+                                self.vcenter_pass,
+                                self.vcenter_server,
+                                self.esxi_user,
+                                self.esxi_pass,
+                                self.esxi_hosts)
 
-        self.assertIsInstance(cfg, ConfigParser)
+        self.assertIsInstance(cfg, ConfigParser.RawConfigParser)
         self.assertTrue(cfg.has_section('Vcenter'))
         self.assertTrue(cfg.has_section('Host'))
 
-        self.assertEqual(self.vcenter_user, cfg.get('user'))
-        self.assertEqual(self.vcenter_pass, cfg.get('pass'))
-        self.assertEqual(self.vcenter_server, cfg.get('server'))
+        self.assertEqual(self.vcenter_user, cfg.get('Vcenter', 'user'))
+        self.assertEqual(self.vcenter_pass, cfg.get('Vcenter', 'pass'))
+        self.assertEqual(self.vcenter_server, cfg.get('Vcenter','server'))
 
+
+if __name__ == '__main__':
+    unittest.main()
