@@ -28,12 +28,12 @@ class ManagementFunctionsTest(unittest.TestCase):
 
     def test_create_vmtest_cfg(self):
         """ Test if the create_vmtest_cfg works as expected. """
-        cfg = create_vmtest_cfg(self.vcenter_user,
-                                self.vcenter_pass,
-                                self.vcenter_server,
-                                self.esxi_user,
-                                self.esxi_pass,
-                                self.esxi_hosts)
+        cfg = create_vmtest_cfg(vuser=self.vcenter_user,
+                                vpass=self.vcenter_pass,
+                                vserver=self.vcenter_server,
+                                huser=self.esxi_user,
+                                hpass=self.esxi_pass,
+                                hcluster=self.esxi_hosts)
 
         self.assertIsInstance(cfg, ConfigParser.RawConfigParser)
         self.assertTrue(cfg.has_section('Vcenter'))
