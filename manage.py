@@ -37,8 +37,7 @@ def read_vmtest_cfg(**kwargs):
     config = ConfigParser.ConfigParser()
     config.read(kwargs['cfg'])
 
-    if kwargs.get('debug', None):
-        return config
+    return config
 
 if __name__ == '__main__':
     pass
