@@ -83,10 +83,8 @@ class VmwareBasicTests(TestCase):
 
     def test_vmware_version_host(self):
         """ Is the Vmware version at 5.1?"""
-        for host in CREDS.get('Host', 'Cluster'):
-            server = VIServer()
-            server.connect(host, CREDS.get('Host', 'user'),
-                           CREDS.get('Host', 'pass'))
+        for host in CREDS.get('Host', 'Cluster').split(","):
+            server = self.host_connect(host)
             api = server.get_api_version()
             self.assertEqual('5.1', api)
             server.disconnect()
