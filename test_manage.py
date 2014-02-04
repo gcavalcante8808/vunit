@@ -21,6 +21,8 @@ class ManagementFunctionsTest(unittest.TestCase):
         self.vcenter_user = 'vcenter'
         self.vcenter_pass = 'vcenter123'
         self.vcenter_server = 'vcenter.domain.com'
+        self.vcenter_dcenter = 'myDCenter'
+        self.vcenter_cluster = 'myCluster'
 
         self.esxi_user = 'esxi'
         self.esxi_pass = 'esxi123'
@@ -36,6 +38,8 @@ class ManagementFunctionsTest(unittest.TestCase):
         self.assertEqual(self.vcenter_user, cfg.get('Vcenter', 'user'))
         self.assertEqual(self.vcenter_pass, cfg.get('Vcenter', 'pass'))
         self.assertEqual(self.vcenter_server, cfg.get('Vcenter', 'server'))
+        self.assertEqual(self.vcenter_server, cfg.get('Vcenter', 'datacenter'))
+        self.assertEqual(self.vcenter_server, cfg.get('Vcenter', 'cluster'))
 
         self.assertEqual(self.esxi_user, cfg.get('Host', 'user'))
         self.assertEqual(self.esxi_pass, cfg.get('Host', 'pass'))
@@ -46,6 +50,8 @@ class ManagementFunctionsTest(unittest.TestCase):
         cfg = create_vmtest_cfg(vuser=self.vcenter_user,
                                 vpass=self.vcenter_pass,
                                 vserver=self.vcenter_server,
+                                vdcenter=self.vcenter_dcenter,
+                                vdcluster=self.vcenter_cluster,
                                 huser=self.esxi_user,
                                 hpass=self.esxi_pass,
                                 hcluster=self.esxi_hosts,
