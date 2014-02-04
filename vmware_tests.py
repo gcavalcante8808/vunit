@@ -164,10 +164,7 @@ class VmwareTurnOn(TestCase):
 
     def setUp(self):
         """Connect To Vmware."""
-        self.server = VIServer()
-        self.server.connect(CREDS.get('Vcenter', 'server'),
-                            CREDS.get('Vcenter', 'user'),
-                            CREDS.get('Vcenter', 'pass'))
+        self.server = vcenter_connect()
 
     def tearDown(self):
         """Disconnects from Vmware."""
