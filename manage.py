@@ -16,8 +16,9 @@ def create_vmtest_cfg(vuser, vpass, vserver, huser, hpass, hcluster):
     """ Create a new configuration file;if it exists, it will be overwritten."""
     config = ConfigParser.RawConfigParser()
     config.add_section('Vcenter')
-    config.set('Vcenter', 'user', 'service_dsim@rfoc.srf')
-    config.set('Vcenter', 'pass', 'Receita123@difra')
+    config.set('Vcenter', 'user', vuser)
+    config.set('Vcenter', 'pass', vpass)
+    config.set('Vcenter', 'server', vserver)
     config.add_section('Host')
     config.set('Host', 'user', 'service_dsim@rfoc.srf')
     config.set('Host', 'user', 'rfbV3RO')
