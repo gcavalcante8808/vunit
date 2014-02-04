@@ -20,7 +20,7 @@ def create_vmtest_cfg(**kwargs):
     config.set('Vcenter', 'pass', kwargs['vpass'])
     config.set('Vcenter', 'server', kwargs['vserver'])
     config.set('Vcenter', 'datacenter', kwargs['vdcenter'])
-    config.set('Vcenter', 'cluster', kwargs['vcluster'])
+    config.set('Vcenter', 'cluster', kwargs['vdcluster'])
 
     config.add_section('Host')
     config.set('Host', 'user', kwargs['huser'])
