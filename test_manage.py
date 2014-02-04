@@ -12,7 +12,7 @@ Tests the manage module and the vmware_tests.py module.
 """
 import unittest
 import ConfigParser
-from manage import create_vmtest_cfg
+from manage import create_vmtest_cfg, read_vmtest_cfg
 
 
 class ManagementFunctionsTest(unittest.TestCase):
@@ -26,16 +26,8 @@ class ManagementFunctionsTest(unittest.TestCase):
         self.esxi_pass = 'esxi123'
         self.esxi_hosts = ['host1', 'host2', ]
 
-    def test_create_vmtest_cfg(self):
-        """ Test if the create_vmtest_cfg works as expected. """
-        cfg = create_vmtest_cfg(vuser=self.vcenter_user,
-                                vpass=self.vcenter_pass,
-                                vserver=self.vcenter_server,
-                                huser=self.esxi_user,
-                                hpass=self.esxi_pass,
-                                hcluster=self.esxi_hosts)
-
-        self.assertIsInstance(cfg, ConfigParser.RawConfigParser)
+    def assert_default_attrs(self, cfg):
+        """ Do the general tests of a configuration object attributes."""
         self.assertTrue(cfg.has_section('Vcenter'))
         self.assertTrue(cfg.has_section('Host'))
 
@@ -47,9 +39,24 @@ class ManagementFunctionsTest(unittest.TestCase):
         self.assertEqual(self.esxi_pass, cfg.get('Host', 'pass'))
         self.assertEqual(self.esxi_hosts, cfg.get('Host', 'cluster'))
 
-        c = ConfigParser.RawConfigParser()
-        c.read('vmware.cfg')
-        self.assertTrue(c)
+    def test_create_vmtest_cfg(self):
+        """ Test if the create_vmtest_cfg works as expected. """
+        cfg = create_vmtest_cfg(vuser=self.vcenter_user,
+                                vpass=self.vcenter_pass,
+                                vserver=self.vcenter_server,
+                                huser=self.esxi_user,
+                                hpass=self.esxi_pass,
+                                hcluster=self.esxi_hosts,
+                                debug=True)
+
+        self.assertIsInstance(cfg, ConfigParser.RawConfigParser)
+        self.assert_default_attrs(cfg)
+
+    def test_read_vmtest_cfg(self):
+        """ Test if the read_vm_test_cfg works as expected"""
+        cfg = read_vmtest_cfg(cfg='vmware.cfg', debug=True)
+        self.assertIsInstance(cfg, ConfigParser.ConfigParser)
+        self.assert_default_attrs(cfg)
 
 
 if __name__ == '__main__':

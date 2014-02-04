@@ -14,7 +14,7 @@ import ConfigParser
 
 def create_vmtest_cfg(**kwargs):
     """ Create a new configuration file;if it exists, it will be overwritten."""
-    config = ConfigParser.RawConfigParser()
+    config = ConfigParser.ConfigParser()
     config.add_section('Vcenter')
     config.set('Vcenter', 'user', kwargs['vuser'])
     config.set('Vcenter', 'pass', kwargs['vpass'])
@@ -28,13 +28,17 @@ def create_vmtest_cfg(**kwargs):
     with open('vmware.cfg', 'wb') as configfile:
         config.write(configfile)
 
-    return config
+    if kwargs.get('debug', None):
+        return config
 
 
-def read_vmtest_cfg():
+def read_vmtest_cfg(**kwargs):
     """ Read the configuration file previously created."""
-    config = ConfigParser.RawConfigParser()
-    config.read('vmware.cfg')
+    config = ConfigParser.ConfigParser()
+    config.read(kwargs['cfg'])
+
+    if kwargs.get('debug', None):
+        return config
 
 if __name__ == '__main__':
     pass
