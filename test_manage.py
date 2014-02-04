@@ -16,6 +16,7 @@ from manage import create_vmtest_cfg
 
 
 class ManagementFunctionsTest(unittest.TestCase):
+    """ Contains all manage tests."""
     def setUp(self):
         self.vcenter_user = 'vcenter'
         self.vcenter_pass = 'vcenter123'
@@ -26,6 +27,7 @@ class ManagementFunctionsTest(unittest.TestCase):
         self.esxi_hosts = ['host1', 'host2', ]
 
     def test_create_vmtest_cfg(self):
+        """ Test if the create_vmtest_cfg works as expected. """
         cfg = create_vmtest_cfg(self.vcenter_user,
                                 self.vcenter_pass,
                                 self.vcenter_server,
@@ -39,11 +41,16 @@ class ManagementFunctionsTest(unittest.TestCase):
 
         self.assertEqual(self.vcenter_user, cfg.get('Vcenter', 'user'))
         self.assertEqual(self.vcenter_pass, cfg.get('Vcenter', 'pass'))
-        self.assertEqual(self.vcenter_server, cfg.get('Vcenter','server'))
+        self.assertEqual(self.vcenter_server, cfg.get('Vcenter', 'server'))
 
         self.assertEqual(self.esxi_user, cfg.get('Host', 'user'))
         self.assertEqual(self.esxi_pass, cfg.get('Host', 'pass'))
-        self.assertEqual(self.esxi_hosts, cfg.get('Host','cluster'))
+        self.assertEqual(self.esxi_hosts, cfg.get('Host', 'cluster'))
+
+        c = ConfigParser.RawConfigParser()
+        c.read('vmware.cfg')
+        self.assertTrue(c)
+
 
 if __name__ == '__main__':
     unittest.main()
