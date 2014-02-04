@@ -41,6 +41,9 @@ class ManagementFunctionsTest(unittest.TestCase):
         self.assertEqual(self.vcenter_pass, cfg.get('Vcenter', 'pass'))
         self.assertEqual(self.vcenter_server, cfg.get('Vcenter','server'))
 
+        self.assertEqual(self.esxi_user, cfg.get('Host', 'user'))
+        self.assertEqual(self.esxi_pass, cfg.get('Host', 'pass'))
+        self.assertEqual(self.esxi_hosts, cfg.get('Host','cluster'))
 
 if __name__ == '__main__':
     unittest.main()

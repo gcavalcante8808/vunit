@@ -19,13 +19,12 @@ def create_vmtest_cfg(vuser, vpass, vserver, huser, hpass, hcluster):
     config.set('Vcenter', 'user', vuser)
     config.set('Vcenter', 'pass', vpass)
     config.set('Vcenter', 'server', vserver)
+
     config.add_section('Host')
-    config.set('Host', 'user', 'service_dsim@rfoc.srf')
-    config.set('Host', 'user', 'rfbV3RO')
-    config.set('Host', 'pass', 'Receita123$')
-    config.set('Host', 'cluster', ['10.61.12.109', '10.61.12.110',
-                                         '10.61.12.111', '10.61.12.113',
-                                         '10.61.12.114', '10.61.12.115'])
+    config.set('Host', 'user', huser)
+    config.set('Host', 'pass', hpass)
+    config.set('Host', 'cluster', hcluster)
+    
     with open('vmware.cfg', 'wb') as configfile:
         config.write(configfile)
 
