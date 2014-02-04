@@ -24,7 +24,7 @@ class ManagementFunctionsTest(unittest.TestCase):
 
         self.esxi_user = 'esxi'
         self.esxi_pass = 'esxi123'
-        self.esxi_hosts = ['host1', 'host2', ]
+        self.esxi_hosts = str(['host1', 'host2'])
 
     def assert_default_attrs(self, cfg):
         """ Do the general tests of a configuration object attributes."""
