@@ -12,19 +12,19 @@
 import ConfigParser
 
 
-def create_vmtest_cfg(vuser, vpass, vserver, huser, hpass, hcluster):
+def create_vmtest_cfg(**kwargs):
     """ Create a new configuration file;if it exists, it will be overwritten."""
     config = ConfigParser.RawConfigParser()
     config.add_section('Vcenter')
-    config.set('Vcenter', 'user', vuser)
-    config.set('Vcenter', 'pass', vpass)
-    config.set('Vcenter', 'server', vserver)
+    config.set('Vcenter', 'user', kwargs['vuser'])
+    config.set('Vcenter', 'pass', kwargs['vpass'])
+    config.set('Vcenter', 'server', kwargs['vserver'])
 
     config.add_section('Host')
-    config.set('Host', 'user', huser)
-    config.set('Host', 'pass', hpass)
-    config.set('Host', 'cluster', hcluster)
-    
+    config.set('Host', 'user', kwargs['huser'])
+    config.set('Host', 'pass', kwargs['hpass'])
+    config.set('Host', 'cluster', kwargs['hcluster'])
+
     with open('vmware.cfg', 'wb') as configfile:
         config.write(configfile)
 
