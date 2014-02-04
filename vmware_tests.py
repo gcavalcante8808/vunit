@@ -14,49 +14,59 @@ import pickle
 import socket
 from unittest import TestCase, main
 from pysphere import VIServer, VIApiException, VIMor, VIProperty
+from manage import read_vmtest_cfg
 
-ESXI_CREDS = ('service_dsim@rfoc.srf', 'Receita123@difra')
-HOST_CREDS = ('rfbV3RO', 'Receita123$')
-ESXI_HOSTS = ["10.61.12.109", "10.61.12.110", "10.61.12.111", "10.61.12.113",
-"10.61.12.114", "10.61.12.115"]
+CREDS = read_vmtest_cfg(cfg="vmware.cfg")
 
 
 class VmwareBasicTests(TestCase):
     """ Just do all basic tests."""
-    def test_user_can_login_on_vcenter(self):
-        '''Is the Vcenter capable at this moment to login an Active Directory
-        User?
-        '''
+
+    def host_connect(self, host):
         server = VIServer()
+        server.connect(host, CREDS.get('Host', 'user'),
+                       CREDS.get('Host', 'pass'))
+
+        return server
+
+    def vcenter_connect(self):
+        server = VIServer()
+        server.connect(CREDS.get('Vcenter', 'server'),
+                       CREDS.get('Vcenter', 'user'),
+                       CREDS.get('Vcenter', 'pass'))
+
+        return server
+
+    def test_user_can_login_on_vcenter(self):
+        """Is the Vcenter capable at this moment to login an Active Directory
+        User?
+        """
         try:
-            server.connect('10.61.12.116', ESXI_CREDS[0], ESXI_CREDS[1])
+            server = self.vcenter_connect()
+            server.disconnect()
         except VIApiException:
             self.fail("Servidor Indisponivel ou Usuario sem Acesso")
-        server.disconnect()
 
     def test_user_can_login_on_host(self):
         """Local Users can login into hosts separately?"""
-        for host in ESXI_HOSTS:
-            server = VIServer()
+        for host in CREDS.get('Host', 'Cluster').split(","):
             try:
-                server.connect(host, HOST_CREDS[0], HOST_CREDS[1])
+                server = self.host_connect(host)
+                server.disconnect()
             except VIApiException:
-                self.fail("Servidor Indisponivel ou Usuario sem Acesso")
-            server.disconnect()
+                self.fail("Service Unavailable or Unknown User/Password")
 
     def test_vmwareapi_vcenter_type(self):
         """ Is The API Type of 10.61.12.116 a vcenter type?"""
-        server = VIServer()
-        server.connect('10.61.12.116', ESXI_CREDS[0], ESXI_CREDS[1])
+        server = self.vcenter_connect()
         server_type = server.get_api_type()
         self.assertEqual('VirtualCenter', server_type)
         server.disconnect()
 
     def test_vmwareapi_host_type(self):
         """ Is the Api of the hosts a Host API Type?"""
-        for host in ESXI_HOSTS:
-            server = VIServer()
-            server.connect(host, HOST_CREDS[0], HOST_CREDS[1])
+        for host in CREDS.get('Host', 'Cluster').split(","):
+            server = self.host_connect(host)
             server_type = server.get_api_type()
             self.assertEqual('HostAgent', server_type)
             server.disconnect()
@@ -64,16 +74,19 @@ class VmwareBasicTests(TestCase):
     def test_vmware_version_vcenter(self):
         """ Is the Vmware version at 5.1?"""
         server = VIServer()
-        server.connect('10.61.12.116', ESXI_CREDS[0], ESXI_CREDS[1])
+        server.connect(CREDS.get('Vcenter', 'server'),
+                       CREDS.get('Vcenter', 'user'),
+                       CREDS.get('Vcenter', 'pass'))
         api = server.get_api_version()
         self.assertEqual('5.1', api)
         server.disconnect()
 
     def test_vmware_version_host(self):
         """ Is the Vmware version at 5.1?"""
-        for host in ESXI_HOSTS:
+        for host in CREDS.get('Host', 'Cluster'):
             server = VIServer()
-            server.connect(host, HOST_CREDS[0], HOST_CREDS[1])
+            server.connect(host, CREDS.get('Host', 'user'),
+                           CREDS.get('Host', 'pass'))
             api = server.get_api_version()
             self.assertEqual('5.1', api)
             server.disconnect()
@@ -82,18 +95,26 @@ class VmwareBasicTests(TestCase):
         """ Get and write all poweredon vms into a file, that will be used
         later at the VMPowerOn Test."""
         server = VIServer()
-        server.connect('10.61.12.116', ESXI_CREDS[0], ESXI_CREDS[1])
+        server.connect(CREDS.get('Vcenter', 'server'),
+                       CREDS.get('Vcenter', 'user'),
+                       CREDS.get('Vcenter', 'pass'))
         vms = server.get_registered_vms(status='poweredOn')
+
         with open('vm_number.txt', 'wb') as vm_file:
             pickle.dump(vms, vm_file)
+
         server.disconnect()
 
     def test_and_write_datastores(self):
-        '''Get and write all available datastores into a file.'''
+        """Get and write all available datastores into a file."""
         server = VIServer()
-        server.connect('10.61.12.116', ESXI_CREDS[0], ESXI_CREDS[1])
+        server.connect(CREDS.get('Vcenter', 'server'),
+                       CREDS.get('Vcenter', 'user'),
+                       CREDS.get('Vcenter', 'pass'))
+
         with open('datastores.txt', 'wb') as ds_file:
             pickle.dump(server.get_datastores().values(), ds_file)
+
         server.disconnect()
 
 #######
@@ -108,7 +129,9 @@ class VmwareTurnOff(TestCase):
         """O Vcenter ainda está ligado?"""
         server = VIServer()
         try:
-            server.connect('10.61.12.116', ESXI_CREDS[0], ESXI_CREDS[1])
+            server.connect(CREDS.get('Vcenter', 'server'),
+                           CREDS.get('Vcenter', 'user'),
+                           CREDS.get('Vcenter', 'pass'))
             self.fail(u"O Vcenter ainda está disponível")
         except socket.error:
             pass
@@ -119,22 +142,26 @@ class VmwareTurnOff(TestCase):
 
     def test_if_all_vms_are_off(self):
         """Todas as máquinas virtuais estão desligadas?"""
-        for host in ESXI_HOSTS:
+        for host in CREDS.get('Host', 'Cluster'):
             server = VIServer()
-            server.connect(host, HOST_CREDS[0], HOST_CREDS[1])
+            server.connect(host, CREDS.get('Host', 'user'),
+                           CREDS.get('Host', 'pass'))
             off = server.get_registered_vms(status='poweredOn')
             self.assertEqual(0, len(off), u"")
 
     def test_if_all_hosts_are_in_maintenance(self):
         """Todos os hosts estão em modo de manutenção?"""
         server = VIServer()
-        server.connect('10.61.12.116', ESXI_CREDS[0], ESXI_CREDS[1])
+        server.connect(CREDS.get('Vcenter', 'server'),
+                       CREDS.get('Vcenter', 'user'),
+                       CREDS.get('Vcenter', 'pass'))
         hosts = server.get_hosts()
+
         for host in hosts:
             host_mor = VIMor(host, 'HostSystem')
             host_props = VIProperty(server, host_mor)
             self.assertTrue(host_props.runtime.inMaintenanceMode,
-                u"Nem todos os hosts estão desativados")
+                            u"Nem todos os hosts estão desativados")
 
 #######
 ####### DIA DE ATIVAÇÃO DO VMWARE
@@ -149,7 +176,9 @@ class VmwareTurnOn(TestCase):
     def setUp(self):
         """Connect To Vmware."""
         self.server = VIServer()
-        self.server.connect('10.61.12.116', ESXI_CREDS[0], ESXI_CREDS[1])
+        self.server.connect(CREDS.get('Vcenter', 'server'),
+                            CREDS.get('Vcenter', 'user'),
+                            CREDS.get('Vcenter', 'pass'))
 
     def tearDown(self):
         """Disconnects from Vmware."""
@@ -162,19 +191,20 @@ class VmwareTurnOn(TestCase):
             host_mor = VIMor(host, 'HostSystem')
             host_props = VIProperty(self.server, host_mor)
             self.assertFalse(host_props.runtime.inMaintenanceMode,
-                u"Nem todos os hosts estão ativados, host:{}".format(host))
+                             u"Host Not Activated:{}".format(
+                                 host))
 
     def test_if_rfb_datacenter_is_available(self):
         """O datacenter da RFB está disponível?"""
         datacenters = self.server.get_datacenters()
         self.assertEqual('Datacenter RFB', datacenters['datacenter-2'],
-            u"O datacenter da RFB não está disponível")
+                         u"O datacenter da RFB não está disponível")
 
     def test_if_rfb_cluster_is_available(self):
         """O Cluster da RFB está disponível?"""
         cluster = self.server.get_clusters()
         self.assertEqual('Cluster Receita', cluster['domain-c55'],
-            u"O cluster da RFB não está disponível")
+                         u"O cluster da RFB não está disponível")
 
     def test_if_all_previous_poweredOn_machines_are_available(self):
         """As máquinas virtuais ligadas são as mesmas antes da parada?"""
@@ -189,6 +219,7 @@ class VmwareTurnOn(TestCase):
         online_ds = self.server.get_datastores().values()
         diff_ds = set(prev_ds).difference(online_ds)
         self.assertEqual(set(), diff_ds, diff_ds)
+
 
 if __name__ == '__main__':
     main()
