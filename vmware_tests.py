@@ -182,12 +182,14 @@ class VmwareTurnOn(TestCase):
 
     def test_if_rfb_datacenter_is_available(self):
         """Is the Datacenter available?"""
+        # TODO: The datacenter must be a parameter.
         datacenters = self.server.get_datacenters()
         self.assertEqual('Datacenter RFB', datacenters['datacenter-2'],
                          u"O datacenter da RFB não está disponível")
 
     def test_if_rfb_cluster_is_available(self):
         """Is the RFB Cluster available?"""
+        # TODO: The cluster must be a parameter.
         cluster = self.server.get_clusters()
         self.assertEqual('Cluster Receita', cluster['domain-c55'],
                          u"O cluster da RFB não está disponível")
