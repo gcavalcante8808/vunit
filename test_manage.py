@@ -26,6 +26,8 @@ class ManagementFunctionsTest(unittest.TestCase):
         self.esxi_pass = 'esxi123'
         self.esxi_hosts = str(['host1', 'host2'])
 
+        self.cfg = 'vmware_test.cfg'
+
     def assert_default_attrs(self, cfg):
         """ Do the general tests of a configuration object attributes."""
         self.assertTrue(cfg.has_section('Vcenter'))
@@ -47,6 +49,7 @@ class ManagementFunctionsTest(unittest.TestCase):
                                 huser=self.esxi_user,
                                 hpass=self.esxi_pass,
                                 hcluster=self.esxi_hosts,
+                                cfg=self.cfg,
                                 debug=True)
 
         self.assertIsInstance(cfg, ConfigParser.RawConfigParser)
@@ -54,7 +57,7 @@ class ManagementFunctionsTest(unittest.TestCase):
 
     def test_read_vmtest_cfg(self):
         """ Test if the read_vm_test_cfg works as expected"""
-        cfg = read_vmtest_cfg(cfg='vmware.cfg', debug=True)
+        cfg = read_vmtest_cfg(cfg=self.cfg, debug=True)
         self.assertIsInstance(cfg, ConfigParser.ConfigParser)
         self.assert_default_attrs(cfg)
 
