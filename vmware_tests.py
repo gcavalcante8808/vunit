@@ -171,7 +171,7 @@ class VmwareTurnOn(TestCase):
         self.server.disconnect()
 
     def test_if_all_hosts_arent_in_maintenance(self):
-        """Todos os hosts estão disponíveis(fora do modo de manutenção)?"""
+        """Are all the hosts out of the maintenance?"""
         hosts = self.server.get_hosts()
         for host in hosts:
             host_mor = VIMor(host, 'HostSystem')
@@ -181,26 +181,26 @@ class VmwareTurnOn(TestCase):
                                  host))
 
     def test_if_rfb_datacenter_is_available(self):
-        """O datacenter da RFB está disponível?"""
+        """Is the Datacenter available?"""
         datacenters = self.server.get_datacenters()
         self.assertEqual('Datacenter RFB', datacenters['datacenter-2'],
                          u"O datacenter da RFB não está disponível")
 
     def test_if_rfb_cluster_is_available(self):
-        """O Cluster da RFB está disponível?"""
+        """Is the RFB Cluster available?"""
         cluster = self.server.get_clusters()
         self.assertEqual('Cluster Receita', cluster['domain-c55'],
                          u"O cluster da RFB não está disponível")
 
     def test_if_all_previous_poweredOn_machines_are_available(self):
-        """As máquinas virtuais ligadas são as mesmas antes da parada?"""
+        """Are all previous poweredOn vms the same?"""
         prev_vms = pickle.load(open('vm_number.txt', 'rb'))
         online_vms = self.server.get_registered_vms(status='poweredOn')
         diff_vms = set(prev_vms).difference(online_vms)
         self.assertEqual(set(), diff_vms, diff_vms)
 
     def test_if_all_previous_datastores_are_available(self):
-        """Os datastores disponíveis são os mesmos de antes da parada?"""
+        """Are all previous available datastores the same?"""
         prev_ds = pickle.load(open('datastores.txt', 'rb'))
         online_ds = self.server.get_datastores().values()
         diff_ds = set(prev_ds).difference(online_ds)
