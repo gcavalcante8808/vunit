@@ -92,10 +92,7 @@ class VmwareBasicTests(TestCase):
     def test_and_write_poweredon_vms(self):
         """ Get and write all poweredon vms into a file, that will be used
         later at the VMPowerOn Test."""
-        server = VIServer()
-        server.connect(CREDS.get('Vcenter', 'server'),
-                       CREDS.get('Vcenter', 'user'),
-                       CREDS.get('Vcenter', 'pass'))
+        server = self.vcenter_connect()
         vms = server.get_registered_vms(status='poweredOn')
 
         with open('vm_number.txt', 'wb') as vm_file:
@@ -105,10 +102,7 @@ class VmwareBasicTests(TestCase):
 
     def test_and_write_datastores(self):
         """Get and write all available datastores into a file."""
-        server = VIServer()
-        server.connect(CREDS.get('Vcenter', 'server'),
-                       CREDS.get('Vcenter', 'user'),
-                       CREDS.get('Vcenter', 'pass'))
+        server = self.vcenter_connect()
 
         with open('datastores.txt', 'wb') as ds_file:
             pickle.dump(server.get_datastores().values(), ds_file)
