@@ -14,12 +14,10 @@ except ImportError:
     py2exe = None
 
 setup(name='vunit',
-      version='0.1.1',
+      version='0.1.2',
       scripts=['vunit.py', 'vunit_cfg.py'],
       author='Gabriel Abdalla Cavalcante',
-      data_files=[('vunit', 'test_vunit_cfg.py'), 
-      ('vunit', 'requirements.txt'), 
-      ('vunit', 'vunit_utils.py']),
+      data_files=[('vunit', ['test_vunit_cfg.py', 'requirements.txt', 'vunit_utils.py'])], 
       install_requires=['pysphere'],
       author_email='gabriel.cavalcante88@gmail.com',
       description = ("""Vunit is a python script that relies on pysphere library
