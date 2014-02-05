@@ -193,12 +193,12 @@ class VmwareTurnOn(TestCase):
                              u"Host Not Activated:{}".format(
                                  host))
 
-    def test_if_rfb_datacenter_is_available(self):
+    def test_if_all_previous_datacenters_are_available(self):
         """Is the Datacenter available?"""
-        # TODO: The datacenter must be a parameter.
-        datacenters = self.server.get_datacenters()
-        self.assertEqual('Datacenter RFB', datacenters['datacenter-2'],
-                         u"O datacenter da RFB não está disponível")
+        prev_dcs = pickle.load(open('datacenters.txt'))
+        online_dcs = self.server.get_datacenters().values()
+        diff_dcs = set(prev_dcs).difference(online_dcs)
+        self.assertEqual(set(), diff_dcs, diff_dcs)
 
     def test_if_rfb_cluster_is_available(self):
         """Is the RFB Cluster available?"""
