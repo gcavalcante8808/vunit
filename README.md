@@ -7,22 +7,22 @@ resources before or after maintenances.
 Introduction
 ------------
 
-Vmware-unittests is a python script that relies on pysphere library to test
+Vunit is a python script that relies on pysphere library to test
 the Vmware Esxi and Vcenter environment with some usefull tests. With this tool,
 system admins can verify impacts on environments before or after a maintenance.
 
 Installation
 ------------
 
-1. Install Vmware-unittests:
+1. Install vunit:
 
 You can install the Vmware-unittests through pip:
 
-`pip install Vmware-unittests`
+`pip install vunit`
 
 The sdist package can be downloaded as well in the pypi page:
 
-https://pypi.python.org/pypi/vmware-unittests
+https://pypi.python.org/pypi/vunit
 
 Requirements
 ------------
