@@ -130,6 +130,7 @@ class VmwareBasicTests(TestCase):
         server.disconnect()
 
     def test_and_write_clusters(self):
+        """ Get and write all available clusters into a file. """
         server = vcenter_connect()
         write_resource_file('clusters.txt', server.get_datacenters().values())
         server.disconnect()
