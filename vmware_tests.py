@@ -12,11 +12,13 @@ This module contains all instructions to test the VMware Infraestructure.
 """
 import pickle
 import socket
+import os
 from unittest import TestCase, main
 from pysphere import VIServer, VIApiException, VIMor, VIProperty
 from manage import read_vmtest_cfg
 
 CREDS = read_vmtest_cfg(cfg="vmware.cfg")
+
 
 def vcenter_connect():
     """ Connect to the vcenter. """
@@ -35,6 +37,19 @@ def host_connect(host):
                    CREDS.get('Host', 'pass'))
 
     return server
+
+
+def get_or_create_dir(directory='resource_lists'):
+    """ Verify if the resource lists dir exists and create it if necessary."""
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+
+def write_resource_file(rfile, value):
+    """ Take values and write them into a specified (r)file. """
+    get_or_create_dir()
+    with open('resource_lists'.join(rfile), 'wb') as resource_file:
+        pickle.dump(value, resource_file)
 
 
 class VmwareBasicTests(TestCase):
@@ -97,33 +112,27 @@ class VmwareBasicTests(TestCase):
         later at the VMPowerOn Test."""
         server = vcenter_connect()
         vms = server.get_registered_vms(status='poweredOn')
-
-        with open('resource_lists/vm_number.txt', 'wb') as vm_file:
-            pickle.dump(vms, vm_file)
-
+        write_resource_file('vm_number.txt', vms)
         server.disconnect()
 
     def test_and_write_datastores(self):
         """Get and write all available datastores into a file."""
         server = vcenter_connect()
-
-        with open('resource_lists/datastores.txt', 'wb') as ds_file:
-            pickle.dump(server.get_datastores().values(), ds_file)
-
+        write_resource_file('datastores.txt',
+                            server.get_datastores().values())
         server.disconnect()
 
     def test_and_write_datacenters(self):
         """ Get and write all available datacenters into a file."""
         server = vcenter_connect()
-
-        with open('resource_lists/datacenters.txt', 'wb') as dc_file:
-            pickle.dump(server.get_datacenters().values(), dc_file)
+        write_resource_file('datacenters.txt',
+                            server.get_datacenters().values())
+        server.disconnect()
 
     def test_and_write_clusters(self):
         server = vcenter_connect()
-
-        with open('resource_lists/clusters.txt', 'wb') as c_file:
-            pickle.dump(server.get_datacenters().values(), c_file)
+        write_resource_file('clusters.txt', server.get_datacenters().values())
+        server.disconnect()
 
 #######
 ####### DIA DE DESLIGAMENTO DO VMWARE
