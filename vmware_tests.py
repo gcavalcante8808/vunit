@@ -207,13 +207,6 @@ class VmwareTurnOn(TestCase):
         diff_cls = set(prev_cls).difference(online_cls)
         self.assertEqual(set(), diff_cls, diff_cls)
 
-    def test_if_rfb_cluster_is_available(self):
-        """Is the RFB Cluster available?"""
-        # TODO: The cluster must be a parameter.
-        cluster = self.server.get_clusters()
-        self.assertEqual('Cluster Receita', cluster['domain-c55'],
-                         u"O cluster da RFB não está disponível")
-
     def test_if_all_previous_started_machines_are_available(self):
         """Are all previous poweredOn vms the same?"""
         prev_vms = pickle.load(open('vm_number.txt', 'rb'))
