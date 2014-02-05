@@ -12,10 +12,10 @@ This module contains all instructions to test the VMware Infraestructure.
 """
 import pickle
 import socket
-import os
 from unittest import TestCase, main
 from pysphere import VIServer, VIApiException, VIMor, VIProperty
 from manage import read_vmtest_cfg
+from utils import write_resource_file
 
 CREDS = read_vmtest_cfg(cfg="vmware.cfg")
 
@@ -37,19 +37,6 @@ def host_connect(host):
                    CREDS.get('Host', 'pass'))
 
     return server
-
-
-def get_or_create_dir(directory='resource_lists'):
-    """ Verify if the resource lists dir exists and create it if necessary."""
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-
-def write_resource_file(rfile, value):
-    """ Take values and write them into a specified (r)file. """
-    get_or_create_dir()
-    with open('resource_lists'.join(rfile), 'wb') as resource_file:
-        pickle.dump(value, resource_file)
 
 
 class VmwareBasicTests(TestCase):
