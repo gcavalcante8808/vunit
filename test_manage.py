@@ -12,7 +12,7 @@ Tests the manage module and the vmware_tests.py module.
 """
 import unittest
 import ConfigParser
-from manage import create_vmtest_cfg, read_vmtest_cfg
+from vunit_cfg import create_vmtest_cfg, read_vmtest_cfg
 
 
 class ManagementFunctionsTest(unittest.TestCase):
