@@ -98,7 +98,7 @@ class VmwareBasicTests(TestCase):
         server = vcenter_connect()
         vms = server.get_registered_vms(status='poweredOn')
 
-        with open('vm_number.txt', 'wb') as vm_file:
+        with open('resource_lists/vm_number.txt', 'wb') as vm_file:
             pickle.dump(vms, vm_file)
 
         server.disconnect()
@@ -107,7 +107,7 @@ class VmwareBasicTests(TestCase):
         """Get and write all available datastores into a file."""
         server = vcenter_connect()
 
-        with open('datastores.txt', 'wb') as ds_file:
+        with open('resource_lists/datastores.txt', 'wb') as ds_file:
             pickle.dump(server.get_datastores().values(), ds_file)
 
         server.disconnect()
@@ -116,18 +116,19 @@ class VmwareBasicTests(TestCase):
         """ Get and write all available datacenters into a file."""
         server = vcenter_connect()
 
-        with open('datacenters.txt', 'wb') as dc_file:
+        with open('resource_lists/datacenters.txt', 'wb') as dc_file:
             pickle.dump(server.get_datacenters().values(), dc_file)
 
     def test_and_write_clusters(self):
         server = vcenter_connect()
 
-        with open('clusters.txt', 'wb') as c_file:
+        with open('resource_lists/clusters.txt', 'wb') as c_file:
             pickle.dump(server.get_datacenters().values(), c_file)
 
 #######
 ####### DIA DE DESLIGAMENTO DO VMWARE
 #######
+
 
 class VmwareTurnOff(TestCase):
     """ Verifica se todas as ações para o desligamento do ambiente foram
@@ -195,28 +196,28 @@ class VmwareTurnOn(TestCase):
 
     def test_if_all_previous_datacenters_are_available(self):
         """Are all previous Datacenters available?"""
-        prev_dcs = pickle.load(open('datacenters.txt'))
+        prev_dcs = pickle.load(open('resource_lists/datacenters.txt'))
         online_dcs = self.server.get_datacenters().values()
         diff_dcs = set(prev_dcs).difference(online_dcs)
         self.assertEqual(set(), diff_dcs, diff_dcs)
 
     def test_if_all_previous_clusters_are_available(self):
         """Are all previous clusters available?"""
-        prev_cls = pickle.load(open('clusters.txt'))
+        prev_cls = pickle.load(open('resource_lists/clusters.txt'))
         online_cls = self.server.get_datacenters().values()
         diff_cls = set(prev_cls).difference(online_cls)
         self.assertEqual(set(), diff_cls, diff_cls)
 
     def test_if_all_previous_started_machines_are_available(self):
         """Are all previous poweredOn vms the same?"""
-        prev_vms = pickle.load(open('vm_number.txt', 'rb'))
+        prev_vms = pickle.load(open('resource_lists/vm_number.txt', 'rb'))
         online_vms = self.server.get_registered_vms(status='poweredOn')
         diff_vms = set(prev_vms).difference(online_vms)
         self.assertEqual(set(), diff_vms, diff_vms)
 
     def test_if_all_previous_ds_are_available(self):
         """Are all previous available datastores the same?"""
-        prev_ds = pickle.load(open('datastores.txt', 'rb'))
+        prev_ds = pickle.load(open('resource_lists/datastores.txt', 'rb'))
         online_ds = self.server.get_datastores().values()
         diff_ds = set(prev_ds).difference(online_ds)
         self.assertEqual(set(), diff_ds, diff_ds)
