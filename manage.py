@@ -10,6 +10,7 @@
     to evaluate the Tests with success.
 """
 import ConfigParser
+import argparse
 
 
 def create_vmtest_cfg(**kwargs):
@@ -19,8 +20,6 @@ def create_vmtest_cfg(**kwargs):
     config.set('Vcenter', 'user', kwargs['vuser'])
     config.set('Vcenter', 'pass', kwargs['vpass'])
     config.set('Vcenter', 'server', kwargs['vserver'])
-    config.set('Vcenter', 'datacenter', kwargs['vdcenter'])
-    config.set('Vcenter', 'cluster', kwargs['vdcluster'])
 
     config.add_section('Host')
     config.set('Host', 'user', kwargs['huser'])
@@ -41,5 +40,23 @@ def read_vmtest_cfg(**kwargs):
 
     return config
 
+
 if __name__ == '__main__':
-    pass
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-vuser', required=True)
+    parser.add_argument('-vpass', required=True)
+    parser.add_argument('-vserver', required=True)
+    parser.add_argument('-huser', required=True)
+    parser.add_argument('-hpass', required=True)
+    parser.add_argument('-hlist', required=True)
+
+    args = parser.parse_args()
+
+    create_vmtest_cfg(vuser=args.vuser,
+                      vpass=args.vpass,
+                      vserver=args.vserver,
+                      huser=args.huser,
+                      hpass=args.hpass,
+                      hcluster=args.hlist,
+                      cfg='vmware.cfg'
+                    )
