@@ -194,11 +194,18 @@ class VmwareTurnOn(TestCase):
                                  host))
 
     def test_if_all_previous_datacenters_are_available(self):
-        """Is the Datacenter available?"""
+        """Are all previous Datacenters available?"""
         prev_dcs = pickle.load(open('datacenters.txt'))
         online_dcs = self.server.get_datacenters().values()
         diff_dcs = set(prev_dcs).difference(online_dcs)
         self.assertEqual(set(), diff_dcs, diff_dcs)
+
+    def test_if_all_previous_clusters_are_available(self):
+        """Are all previous clusters available?"""
+        prev_cls = pickle.load(open('clusters.txt'))
+        online_cls = self.server.get_datacenters().values()
+        diff_cls = set(prev_cls).difference(online_cls)
+        self.assertEqual(set(), diff_cls, diff_cls)
 
     def test_if_rfb_cluster_is_available(self):
         """Is the RFB Cluster available?"""
