@@ -112,6 +112,18 @@ class VmwareBasicTests(TestCase):
 
         server.disconnect()
 
+    def test_and_write_datacenters(self):
+        """ Get and write all available datacenters into a file."""
+        server = vcenter_connect()
+
+        with open('datacenters.txt', 'wb') as dc_file:
+            pickle.dump(server.get_datacenters().values(), dc_file)
+
+    def test_and_write_clusters(self):
+        server = vcenter_connect()
+
+        with open('clusters.txt', 'wb') as c_file:
+            pickle.dump(server.get_datacenters().values(), c_file)
 
 #######
 ####### DIA DE DESLIGAMENTO DO VMWARE
