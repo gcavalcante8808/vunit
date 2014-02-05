@@ -156,6 +156,7 @@ class VmwareTurnOff(TestCase):
 ####### DIA DE ATIVAÇÃO DO VMWARE
 #######
 
+
 class VmwareTurnOn(TestCase):
     """ Testes a serem realizados após o vmware voltar a ser ligado.
         Estes testes verificam se o ambiente está funcionando da mesma
@@ -194,14 +195,14 @@ class VmwareTurnOn(TestCase):
         self.assertEqual('Cluster Receita', cluster['domain-c55'],
                          u"O cluster da RFB não está disponível")
 
-    def test_if_all_previous_poweredOn_machines_are_available(self):
+    def test_if_all_previous_started_machines_are_available(self):
         """Are all previous poweredOn vms the same?"""
         prev_vms = pickle.load(open('vm_number.txt', 'rb'))
         online_vms = self.server.get_registered_vms(status='poweredOn')
         diff_vms = set(prev_vms).difference(online_vms)
         self.assertEqual(set(), diff_vms, diff_vms)
 
-    def test_if_all_previous_datastores_are_available(self):
+    def test_if_all_previous_ds_are_available(self):
         """Are all previous available datastores the same?"""
         prev_ds = pickle.load(open('datastores.txt', 'rb'))
         online_ds = self.server.get_datastores().values()
