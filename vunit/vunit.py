@@ -15,7 +15,7 @@ import socket
 from unittest import TestCase, main
 from pysphere import VIServer, VIApiException, VIMor, VIProperty
 from vunit_cfg import read_vmtest_cfg
-from vunit_utils import write_resource_file
+from vunit.vunit_utils import write_resource_file
 
 CREDS = read_vmtest_cfg(cfg="vmware.cfg")
 
