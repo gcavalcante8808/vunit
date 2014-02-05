@@ -14,8 +14,8 @@ import pickle
 import socket
 from unittest import TestCase, main
 from pysphere import VIServer, VIApiException, VIMor, VIProperty
-from manage import read_vmtest_cfg
-from utils import write_resource_file
+from vunit_cfg import read_vmtest_cfg
+from vunit_utils import write_resource_file
 
 CREDS = read_vmtest_cfg(cfg="vmware.cfg")
 
