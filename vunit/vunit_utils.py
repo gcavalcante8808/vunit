@@ -20,5 +20,5 @@ def get_or_create_dir(directory='resource_lists'):
 def write_resource_file(rfile, value):
     """ Take values and write them into a specified (r)file. """
     get_or_create_dir()
-    with open('resource_lists'.join(rfile), 'wb') as resource_file:
+    with open('resource_lists/'+ rfile, 'wb') as resource_file:
         pickle.dump(value, resource_file)
