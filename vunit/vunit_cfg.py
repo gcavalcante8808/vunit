@@ -59,4 +59,4 @@ if __name__ == '__main__':
                       hpass=args.hpass,
                       hcluster=args.hlist,
                       cfg='vmware.cfg'
-                    )
+    )
