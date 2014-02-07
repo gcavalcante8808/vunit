@@ -233,6 +233,6 @@ if __name__ == '__main__':
     elif args.test == 'turnoff':
         suite = unittest.TestLoader().loadTestsFromTestCase(VmwareTurnOff)
         unittest.TextTestRunner().run(suite)
-    elif args.text == 'turnon':
+    elif args.test == 'turnon':
         suite = unittest.TestLoader().loadTestsFromTestCase(VmwareTurnOn)
         unittest.TextTestRunner().run(suite)
