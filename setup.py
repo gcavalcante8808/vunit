@@ -15,13 +15,13 @@ except ImportError:
 
 setup(name='vunit',
       version='0.1.2',
-      scripts=['vunit.py', 'vunit_cfg.py'],
       author='Gabriel Abdalla Cavalcante',
-      py_modules=['test_vunit_cfg', 'vunit_utils'],
+      scripts=['vunit/vmwtest.py', 'vunit/vunit_cfg.py'],
+      packages=['vunit'],
       install_requires=['pysphere'],
       author_email='gabriel.cavalcante88@gmail.com',
-      description = ("""Vunit is a python script that relies on pysphere library
-      to test the Vmware Esxi and Vcenter environment with some usefull tests.
+      description = ("""Vunit is a python package that relies on pysphere
+      library to provide tests for the Vmware Esxi and Vcenter environment.
       With this tool, system admins can verify impacts on environments before or
       after a maintenance."""),
       url='https://github.com/gcavalcante8808',
