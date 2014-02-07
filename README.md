@@ -86,6 +86,16 @@ VmwareTurnOn is designed to test impacts AFTER a full maintenance of the environ
 It relies on the resources files, previously created with the VmwareBasicTests
 and test if all online resources are the same of the before of the maintenance.
 
+The tests can be started through the 'vmwatest' script, which have the following syntax:
+
+`vmwtest.py --test {basic, turnoff, turnon}`
+
+The options of the '--test' parameter are the tests with a simple syntax use, like:
+
+`vmtest.py --test basic`
+`vmtest.py --test turnoff`
+`vmtest.py --test turnon`
+
 License
 -------
 
