@@ -26,7 +26,6 @@ setup(name='vunit',
       library to provide tests for the Vmware Esxi and Vcenter environment.
       With this tool, system admins can verify impacts on environments before or
       after a maintenance."""),
-      long_description=read('README.md'),
       url='https://github.com/gcavalcante8808',
       classifiers=[
         'Development Status :: 5 - Production/Stable',
