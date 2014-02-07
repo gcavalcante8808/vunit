@@ -12,7 +12,8 @@ This module contains all instructions to test the VMware Infraestructure.
 """
 import pickle
 import socket
-from unittest import TestCase, main
+import argparse
+import unittest
 from pysphere import VIServer, VIApiException, VIMor, VIProperty
 from vunit_cfg import read_vmtest_cfg
 from vunit.vunit_utils import write_resource_file
@@ -39,7 +40,7 @@ def host_connect(host):
     return server
 
 
-class VmwareBasicTests(TestCase):
+class VmwareBasicTests(unittest.TestCase):
     """ Just do all basic tests."""
 
     def test_user_can_login_on_vcenter(self):
@@ -127,7 +128,7 @@ class VmwareBasicTests(TestCase):
 #######
 
 
-class VmwareTurnOff(TestCase):
+class VmwareTurnOff(unittest.TestCase):
     """ Verifica se todas as ações para o desligamento do ambiente foram
         tomadas corretamente."""
 
@@ -167,7 +168,7 @@ class VmwareTurnOff(TestCase):
 #######
 
 
-class VmwareTurnOn(TestCase):
+class VmwareTurnOn(unittest.TestCase):
     """ Testes a serem realizados após o vmware voltar a ser ligado.
         Estes testes verificam se o ambiente está funcionando da mesma
         forma de antes de ser desligado.
@@ -221,4 +222,17 @@ class VmwareTurnOn(TestCase):
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--test', '-t', choices=['basic', 'turnoff', 'turnon'],
+                        required=True)
+    args = parser.parse_args()
+
+    if args.test == 'basic':
+        suite = unittest.TestLoader().loadTestsFromTestCase(VmwareBasicTests)
+        unittest.TextTestRunner().run(suite)
+    elif args.test == 'turnoff':
+        suite = unittest.TestLoader().loadTestsFromTestCase(VmwareTurnOff)
+        unittest.TextTestRunner().run(suite)
+    elif args.text == 'turnon':
+        suite = unittest.TestLoader().loadTestsFromTestCase(VmwareTurnOn)
+        unittest.TextTestRunner().run(suite)
